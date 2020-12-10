@@ -1,9 +1,13 @@
 import React from "react";
 import css from "./style.module.css";
+import MenuItem from "../MenuItem";
 
-const Menu = () => {
+const Menu = (props) => {
     return (
-        <div>tses</div>
+        <nav className={css.Menu}>
+            <MenuItem link="/">ШИНЭ ЗАХИАЛГА</MenuItem>
+            <MenuItem link="/login">НЭВТРЭХ</MenuItem>
+        </nav>
     );
 }
 export default Menu;

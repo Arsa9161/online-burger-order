@@ -12,6 +12,7 @@ const Burger  = (props) => {
             content.push(<BurgerIngredients key={index + "" + i} type={el[0]}/>);
         }
     })
+    // herev orts bhgui bol
     if(content.length == 0) content = <p>Та орцоо сонгон уу.</p>
     return (
         <div className={css.Burger}>
