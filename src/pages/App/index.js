@@ -1,10 +1,11 @@
 import React, {Component} from "react";
-import {Route, BrowserRouter , Link} from "react-router-dom"
+import {Route, Link} from "react-router-dom"
 import css from './style.module.css';
 import Toolbar from "../../components/Toolbar";
 import BurgerPage from "../BurgerPage";
 import SideBar from '../../components/SideBar';
 import OrdersPage from "../OrdersPage";
+import ShippingPage from "../ShippingPage";
 
 class App extends Component {
   
@@ -19,18 +20,15 @@ class App extends Component {
 
   render(){
     return (
-      <BrowserRouter>
           <div>
             <SideBar isShow={this.state.showSideBar} hideSideBar={this.toggleSideBar}/>
             <Toolbar showSideBar={this.toggleSideBar}/>
             <main className={css.Content}>
               <Route path="/" exact component={BurgerPage} />
-              <Route path="/orders" exact component={OrdersPage} />
-              {/* <BurgerPage /> */}
-              {/* <OrdersPage /> */}
+              <Route path="/ship" component={ShippingPage} />
+              <Route path="/orders" component={OrdersPage} />
             </main>
         </div>
-      </BrowserRouter>
     );
   }
 }

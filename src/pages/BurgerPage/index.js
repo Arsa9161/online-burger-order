@@ -50,20 +50,32 @@ class BurgerBuilder extends Component{
         this.setState({confirmOrder : false})
     }
     continueOrder = () => {
-        this.setState({loading: true});
-        let obj = {
-            orts: this.state.ingredients,
-            une: this.state.totalPrice,
-            tuhai: {
-                ner: "Arsa",
-                dugaar: "99999999",
-                hayg: "BZD 13"
-            }
+        // this.setState({loading: true});
+        // let obj = {
+        //     orts: this.state.ingredients,
+        //     une: this.state.totalPrice,
+        //     tuhai: {
+        //         ner: "Arsa",
+        //         dugaar: "99999999",
+        //         hayg: "BZD 13"
+        //     }
+        // }
+        // axios.post("/orders.json", obj)
+        // .then(res => alert("Amjilttai ilgeelee"))
+        // .catch(err => console.log(err))
+        // .finally(() => this.setState({loading: false}))
+
+        let arr = [];
+        for(let property in this.state.ingredients){
+            arr.push(property + "=" + this.state.ingredients[property]);
         }
-        axios.post("/orders.json", obj)
-        .then(res => alert("Amjilttai ilgeelee"))
-        .catch(err => console.log(err))
-        .finally(() => this.setState({loading: false}))
+        arr.push("dun=" + this.state.totalPrice)
+
+        this.props.history.push({
+            pathname : "/ship",
+            search : arr.join("&")
+        });
+        this.hideConfirmOrder();
     }
     render(){
         // ortsuud ni 0 bval true buyu ter ortsnii hasah button disable hiihed hereglene, ...

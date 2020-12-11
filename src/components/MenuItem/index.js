@@ -1,6 +1,13 @@
 import React from "react";
 import css from "./style.module.css";
-import {Link} from "react-router-dom"
-const MenuItem = props => <div><li className={css.MenuItem}><Link to={props.link}>{props.children}</Link></li></div>
+import {NavLink} from "react-router-dom"
+
+const MenuItem = props => (
+    <div>
+        <li className={css.MenuItem}>
+            <NavLink exact={props.exact} activeClassName={css.active} to={props.link}>{props.children}</NavLink>
+        </li>
+    </div>
+)
 
 export default MenuItem;
