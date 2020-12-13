@@ -7,7 +7,7 @@ import OrderSummary from "../../components/OrderSummary";
 import axios from "../../axios-orders";
 import Loader from "../../components/Loader"
 
-const INGREDIENTS_PRICE = {cheese:200,meat:450,salad:100,bacon:500};
+
 const INGREDIENTS_NAME = {
     meat: "Мах",
     cheese: "Бяслаг",
@@ -29,20 +29,20 @@ class BurgerBuilder extends Component{
         confirmOrder: false,
         loading: false
     }
-    add = (type) => {
-        let obj = {...this.state.ingredients};
-        obj[type]++;
-        let newPrice = this.state.totalPrice + INGREDIENTS_PRICE[type];
-        this.setState({ingredients : obj, totalPrice : newPrice,purchasing: true});
-    }
-    remove = (type) => {
-        if(this.state.ingredients[type] > 0) {
-            let obj = {...this.state.ingredients}; 
-            obj[type]--;
-            let newPrice = this.state.totalPrice - INGREDIENTS_PRICE[type];
-            this.setState({purchasing: newPrice > 1000, ingredients : obj, totalPrice : newPrice});
-        }
-    }
+    // add = (type) => {
+    //     let obj = {...this.state.ingredients};
+    //     obj[type]++;
+    //     let newPrice = this.state.totalPrice + INGREDIENTS_PRICE[type];
+    //     this.setState({ingredients : obj, totalPrice : newPrice,purchasing: true});
+    // }
+    // remove = (type) => {
+    //     if(this.state.ingredients[type] > 0) {
+    //         let obj = {...this.state.ingredients}; 
+    //         obj[type]--;
+    //         let newPrice = this.state.totalPrice - INGREDIENTS_PRICE[type];
+    //         this.setState({purchasing: newPrice > 1000, ingredients : obj, totalPrice : newPrice});
+    //     }
+    // }
     showConfirmOrder = () => {
         this.setState({confirmOrder : true})
     }
@@ -50,20 +50,6 @@ class BurgerBuilder extends Component{
         this.setState({confirmOrder : false})
     }
     continueOrder = () => {
-        // this.setState({loading: true});
-        // let obj = {
-        //     orts: this.state.ingredients,
-        //     une: this.state.totalPrice,
-        //     tuhai: {
-        //         ner: "Arsa",
-        //         dugaar: "99999999",
-        //         hayg: "BZD 13"
-        //     }
-        // }
-        // axios.post("/orders.json", obj)
-        // .then(res => alert("Amjilttai ilgeelee"))
-        // .catch(err => console.log(err))
-        // .finally(() => this.setState({loading: false}))
 
         let arr = [];
         for(let property in this.state.ingredients){
@@ -78,12 +64,6 @@ class BurgerBuilder extends Component{
         this.hideConfirmOrder();
     }
     render(){
-        // ortsuud ni 0 bval true buyu ter ortsnii hasah button disable hiihed hereglene, ...
-        let disabledIngredients = {...this.state.ingredients};
-
-        for(let key in disabledIngredients){
-            disabledIngredients[key] = disabledIngredients[key] <= 0;
-        }
 
         return (
             <div>
@@ -91,8 +71,8 @@ class BurgerBuilder extends Component{
                     {this.state.loading ? <Loader /> :
                     <OrderSummary onCancelOrder={this.hideConfirmOrder} onContinueOrder={this.continueOrder} ingredients={this.state.ingredients} ingredientsNames={INGREDIENTS_NAME} price={this.state.totalPrice}/>}
                 </Modal>
-                <Burger ingredients={this.state.ingredients}/>
-                <BuildControls show={this.showConfirmOrder} ingredientsNames={INGREDIENTS_NAME} purchasing={!this.state.purchasing} price={this.state.totalPrice} disabledIngredients={disabledIngredients} add={this.add} remove={this.remove}/>
+                <Burger/>
+                <BuildControls show={this.showConfirmOrder}/>
             </div>
         );
     }
