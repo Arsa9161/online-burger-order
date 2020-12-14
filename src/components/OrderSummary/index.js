@@ -1,4 +1,6 @@
 import React from "react";
+import { connect } from "react-redux";
+
 // import css from "./style.module.css";
 import Button from "../General/Button";
 
@@ -13,4 +15,11 @@ const OrderSummary = props => {
         </div>
     )
 }
-export default OrderSummary;
+const mapStateToProps = state => {
+    return {
+        ingredients : state.burgerReducer.ingredients,
+        ingredientsNames : state.burgerReducer.ingredientsNames,
+        price : state.burgerReducer.totalPrice
+    }
+}
+export default connect(mapStateToProps)(OrderSummary);

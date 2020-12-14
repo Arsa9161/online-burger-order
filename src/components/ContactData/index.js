@@ -1,9 +1,11 @@
 import React from "react";
+import {withRouter} from "react-router-dom";
+import { connect } from "react-redux";
+
+import css from "./style.module.css"
 import Button from "../General/Button";
 import Loader from "../Loader";
-import css from "./style.module.css"
-import axios from "../../axios-orders";
-import {withRouter} from "react-router-dom";
+import * as actions from "../../redux/action/orderAction";
 
 class ContactData extends React.Component {
 
@@ -11,7 +13,11 @@ class ContactData extends React.Component {
         dugaar : null,
         hayg : null,
         ner : null,
-        loading : false
+    }
+    componentDidUpdate = () => {
+        if(this.props.finished && !this.props.error) {
+            this.props.history.replace("/orders")
+        }
     }
     confirmOrder = () => {
         let newState = {...this.state}
@@ -21,11 +27,12 @@ class ContactData extends React.Component {
             une: this.props.totalPrice,
             tuhai: newState
         }
-        this.setState({loading: true});
-        axios.post("/orders.json", obj)
-        .then(res => this.props.history.replace("/orders")) // WithRouter ashiglasnaar high ordered compenent bolno
-        .catch(err => console.log(err))
-        .finally(() => this.setState({loading: false}))
+        this.props.saveOrder(obj);
+        // this.setState({loading: true});
+        // axios.post("/orders.json", obj)
+        // .then(res => this.props.history.replace("/orders")) // WithRouter ashiglasnaar high ordered compenent bolno
+        // .catch(err => console.log(err))
+        // .finally(() => this.setState({loading: false}))
     }
     changeName = (e) => {
         this.setState({ner : e.target.value});
@@ -40,7 +47,7 @@ class ContactData extends React.Component {
 
         return (
         <div>
-            {this.state.loading ? <Loader /> : 
+            {this.props.loading ? <Loader /> : 
             <div className={css.ContactData}>
                 <input onChange={this.changeName} type="text" name="name" placeholder="neree oruulna uu"/>
                 <input onChange={this.changeHayag} type="text" name="location" placeholder="hayagaa oruulna uu"/>
@@ -50,4 +57,18 @@ class ContactData extends React.Component {
         </div>)
     }
 }
-export default withRouter(ContactData); // high ordered com bolgosnoor undsen 3 object maani com d nemegdene
+const mapStateToProps = state => {
+    return {
+        ingredients : state.burgerReducer.ingredients,
+        totalPrice : state.burgerReducer.totalPrice,
+        loading : state.orderReducer.newOrder.loading,
+        error : state.orderReducer.newOrder.error,
+        finished : state.orderReducer.newOrder.finished
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        saveOrder : (obj) => dispatch(actions.saveOrder(obj))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ContactData)); 

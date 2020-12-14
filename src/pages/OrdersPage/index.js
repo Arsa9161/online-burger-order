@@ -3,26 +3,31 @@ import css from './style.module.css';
 import axios from "../../axios-orders";
 import Loader from "../../components/Loader";
 import Order from "../../components/Order";
-
+import { connect } from "react-redux";
+import * as actions from "../../redux/action/orderAction"
 class OrdersPage extends React.Component {
-    state = {
-        orders: [],
-        loading: false
-    }
+
     componentDidMount = () => {
-        this.setState({loading : true})
-        axios.get("/orders.json")
-        .then(res => this.setState({orders : Object.entries(res.data).reverse()}))
-        .catch(err => console.log(err))
-        .finally(() => this.setState({loading : false}))
+        this.props.servereesUnshih();
     }
     render() {
         return (
-            // this.state.loading && <Loader /> 
             <div>
-                {this.state.loading ? <Loader /> : this.state.orders.map(el => <Order key={el[0]} order={el[1]} />)}
+                {this.props.loading ? <Loader /> : this.props.orders.map(el => <Order key={el[0]} order={el[1]} />)}
             </div>
         )
     }
 }
-export default OrdersPage;
+const mapStateToProps = state => {
+    return {
+        loading : state.orderReducer.loading,
+        orders : state.orderReducer.orders,
+        error : state.orderReducer.error
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        servereesUnshih : () => dispatch(actions.loadOrders())
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(OrdersPage);
