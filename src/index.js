@@ -1,15 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {BrowserRouter} from "react-router-dom"
+import {createStore, applyMiddleware, combineReducers, compose} from "redux";
+import {Provider} from "react-redux";
+import thunk from "redux-thunk";
+
 import './index.css';
 import App from './pages/App';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter} from "react-router-dom"
-import {Provider} from "react-redux";
-import {createStore, applyMiddleware, combineReducers, compose} from "redux";
-import thunk from "redux-thunk";
 import burgerReducer from './redux/reducer/burgerReducer';
 import orderReducer from "./redux/reducer/orderReducer";
-
+import loginSignUpReducer from "./redux/reducer/loginSignUpReducer"
+// redux devtool ashiglah tohirgoo
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const loggingMiddleWare = (store) => {
@@ -26,8 +28,10 @@ const loggingMiddleWare = (store) => {
 }
 const reducers = {
   burgerReducer,
-  orderReducer
+  orderReducer,
+  loginSignUpReducer
 }
+// minii todorhoilson middleWare + thunk
 const middleWares = [loggingMiddleWare, thunk]
 const store = createStore(combineReducers(reducers), composeEnhancers(applyMiddleware(...middleWares)));
 

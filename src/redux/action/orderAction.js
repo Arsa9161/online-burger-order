@@ -1,12 +1,14 @@
 import axios from "../../axios-orders";
 
 export const loadOrders = () => {
-    return function(dispatch){
+    return function(dispatch, getState){
         // server duudalt ehelsniig systemdee medegdej action tsatsna
         dispatch(loadOrdersStart())
 
+        const userId = getState().loginSignUpReducer.userId
+        const token = getState().loginSignUpReducer.token
         // serverees duudna
-        axios.get("/orders.json")
+        axios.get(`/orders.json?auth=${token}&orderBy="userId"&equalTo="${userId}"`)
         .then(res => dispatch(loadOrdersSuccess(Object.entries(res.data).reverse())))
         .catch(err => dispatch(loadOrdersError(err)))
     }
@@ -30,12 +32,13 @@ export const loadOrdersError = (error) => {
 }
 
 export const saveOrder = (obj) => {
-    return function(dispatch){
+    return function(dispatch, getState){
         // server duudalt ehelsniig systemdee medegdej action tsatsna
         dispatch(saveOrderStart())
 
+        const token = getState().loginSignUpReducer.token
         // serverees duudna
-        axios.post("/orders.json", obj)
+        axios.post(`/orders.json?auth=${token}`, obj)
         .then(res => dispatch(saveOrderSuccess())) // WithRouter ashiglasnaar high ordered compenent bolno
         .catch(err => dispatch(saveOrderError(err)))
     }

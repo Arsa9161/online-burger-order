@@ -38,6 +38,10 @@ const burgerReducer = (state = initStore, action) => {
             totalPrice : newPrice,
             purchasing : newPrice > 1000
         }
+    } else if(action.type === "LOGOUT") {
+        return {
+            ...initStore
+        }
     }
     return state
 }
