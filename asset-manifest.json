@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/online-burger-order/static/css/main.d4806cba.chunk.css",
+    "main.js": "/online-burger-order/static/js/main.bcf3cd71.chunk.js",
+    "main.js.map": "/online-burger-order/static/js/main.bcf3cd71.chunk.js.map",
+    "runtime-main.js": "/online-burger-order/static/js/runtime-main.5b961c24.js",
+    "runtime-main.js.map": "/online-burger-order/static/js/runtime-main.5b961c24.js.map",
+    "static/js/2.d6791802.chunk.js": "/online-burger-order/static/js/2.d6791802.chunk.js",
+    "static/js/2.d6791802.chunk.js.map": "/online-burger-order/static/js/2.d6791802.chunk.js.map",
+    "static/js/3.e0506ffb.chunk.js": "/online-burger-order/static/js/3.e0506ffb.chunk.js",
+    "static/js/3.e0506ffb.chunk.js.map": "/online-burger-order/static/js/3.e0506ffb.chunk.js.map",
+    "index.html": "/online-burger-order/index.html",
+    "static/css/main.d4806cba.chunk.css.map": "/online-burger-order/static/css/main.d4806cba.chunk.css.map",
+    "static/js/2.d6791802.chunk.js.LICENSE.txt": "/online-burger-order/static/js/2.d6791802.chunk.js.LICENSE.txt",
+    "static/media/burger-logo.ec69c7f6.png": "/online-burger-order/static/media/burger-logo.ec69c7f6.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.5b961c24.js",
+    "static/js/2.d6791802.chunk.js",
+    "static/css/main.d4806cba.chunk.css",
+    "static/js/main.bcf3cd71.chunk.js"
+  ]
+}
