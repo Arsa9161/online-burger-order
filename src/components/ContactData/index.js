@@ -25,7 +25,8 @@ class ContactData extends React.Component {
         let obj = {
             orts: this.props.ingredients,
             une: this.props.totalPrice,
-            tuhai: newState
+            tuhai: newState,
+            userId : this.props.userId
         }
         this.props.saveOrder(obj);
         // this.setState({loading: true});
@@ -63,7 +64,8 @@ const mapStateToProps = state => {
         totalPrice : state.burgerReducer.totalPrice,
         loading : state.orderReducer.newOrder.loading,
         error : state.orderReducer.newOrder.error,
-        finished : state.orderReducer.newOrder.finished
+        finished : state.orderReducer.newOrder.finished,
+        userId : state.loginSignUpReducer.userId
     }
 }
 const mapDispatchToProps = dispatch => {

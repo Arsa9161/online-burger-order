@@ -58,6 +58,10 @@ const orderReducer = (state = initState, action) => {
                         error : action.error
                     }
                 };
+            case "LOGOUT" : 
+                return {
+                    ...initState
+                }
         default : return state;
     }
 }
