@@ -6,7 +6,7 @@ import Button from "../../components/General/Button";
 import ContactData from "../../components/ContactData";
 
 
-const ShippingPage = props => {
+class ShippingPage extends React.Component {
     // ene page maani umnu BurgerPage deerh burgeriin ortsiig damjuulan avch uurdeeree dahij haruulj bga
     // state ={
     //     ingredients : {},
@@ -14,7 +14,7 @@ const ShippingPage = props => {
     // }
     // componentDidMount() {
     //     //  props oor damjin irdeg 3 undsen object iin history goos Url hayagaa avch instance uusgej bn
-    //     const params = new URLSearchParams(props.location.search)
+    //     const params = new URLSearchParams(this.props.location.search)
 
     //     let ingredients = {} // shine ingredients
     //     let totalPrice;
@@ -24,26 +24,26 @@ const ShippingPage = props => {
     //         totalPrice = param[1];
     //     }
     //     // {ingredients : ingredients}
-    //     setState({ingredients,totalPrice}); // herev key : value ijil nertei bval zuvhun neg udaa bichij boldog
+    //     this.setState({ingredients,totalPrice}); // herev key : value ijil nertei bval zuvhun neg udaa bichij boldog
     // }
-    const cancelOrder = () => {
-        props.history.goBack();
+    cancelOrder = () => {
+        this.props.history.goBack();
     }
-    const showContuctData = () => {
-        props.history.replace("/ship/contuct");
+    showContuctData = () => {
+        this.props.history.replace("/ship/contuct");
     }
-
+    render() {
         return (
             <div className={css.ShippingPage}>
                 <Burger/>
-                <Button btnType="Danger" text="ЗАХИАЛГЫГ ЦУЦЛАХ" callBack={cancelOrder}/>
-                <Button btnType="Success" text="ХҮРГЭЛТИЙН МЭДЭЭЛЭЛ ОРУУЛАХ" callBack={showContuctData}/>
+                <Button btnType="Danger" text="ЗАХИАЛГЫГ ЦУЦЛАХ" callBack={this.cancelOrder}/>
+                <Button btnType="Success" text="ХҮРГЭЛТИЙН МЭДЭЭЛЭЛ ОРУУЛАХ" callBack={this.showContuctData}/>
                 <Route path="/ship/contuct">
                     <ContactData/>
                 </Route>
             </div>
         )
-    
+    }
 }
 
 export default ShippingPage; 

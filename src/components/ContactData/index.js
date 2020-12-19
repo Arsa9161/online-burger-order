@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {withRouter} from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -7,57 +7,52 @@ import Button from "../General/Button";
 import Loader from "../Loader";
 import * as actions from "../../redux/action/orderAction";
 
-class ContactData extends React.Component {
+const initState = {
+    dugaar : null,
+    hayg : null,
+    ner : null,
+}
 
-    state = {
-        dugaar : null,
-        hayg : null,
-        ner : null,
-    }
-    componentDidUpdate = () => {
-        if(this.props.finished && !this.props.error) {
-            this.props.cancelOrder();
-            this.props.history.replace("/orders")
+const ContactData = props => {
+    const [user, setUser] = useState(initState)
+
+    useEffect(() =>{
+        if(props.finished && !props.error) {
+            props.cancelOrder();
+            props.history.replace("/orders")
         }
-    }
-    confirmOrder = () => {
-        let newState = {...this.state}
-        delete newState.loading;
+    })
+
+    const confirmOrder = () => {
         let obj = {
-            orts: this.props.ingredients,
-            une: this.props.totalPrice,
-            tuhai: newState,
-            userId : this.props.userId
+            orts: props.ingredients,
+            une: props.totalPrice,
+            tuhai: user,
+            userId : props.userId
         }
-        this.props.saveOrder(obj);
-        // this.setState({loading: true});
-        // axios.post("/orders.json", obj)
-        // .then(res => this.props.history.replace("/orders")) // WithRouter ashiglasnaar high ordered compenent bolno
-        // .catch(err => console.log(err))
-        // .finally(() => this.setState({loading: false}))
+        props.saveOrder(obj);
     }
-    changeName = (e) => {
-        this.setState({ner : e.target.value});
+    const changeName = (e) => {
+        setUser({ner : e.target.value,hayg : user.hayg, dugaar : user.dugaar})
     }
-    changeHayag = (e) => {
-        this.setState({hayg : e.target.value});
+    const changeHayag = (e) => {
+        setUser({ner : user.ner, hayg : e.target.value, dugaar : user.dugaar})
     }
-    changePhone = (e) => {
-        this.setState({dugaar : e.target.value});
+    const changePhone = (e) => {
+        setUser({ner : user.ner, hayg : user.hayg, dugaar : e.target.value})
     }
-    render() {
 
         return (
         <div>
-            {this.props.loading ? <Loader /> : 
+            {props.loading ? <Loader /> : 
             <div className={css.ContactData}>
-                <input onChange={this.changeName} type="text" name="name" placeholder="neree oruulna uu"/>
-                <input onChange={this.changeHayag} type="text" name="location" placeholder="hayagaa oruulna uu"/>
-                <input onChange={this.changePhone} type="text" name="phone" placeholder="utsaa oruulna uu"/>
-                <Button btnType="Success" callBack={this.confirmOrder} text="ҮРГЭЛЖЛҮҮЛЭХ"/>
+                <input onChange={changeName} type="text" name="name" placeholder="neree oruulna uu"/>
+                <input onChange={changeHayag} type="text" name="location" placeholder="hayagaa oruulna uu"/>
+                <input onChange={changePhone} type="text" name="phone" placeholder="utsaa oruulna uu"/>
+                <Button btnType="Success" callBack={confirmOrder} text="ҮРГЭЛЖЛҮҮЛЭХ"/>
             </div>}
         </div>)
-    }
+
 }
 const mapStateToProps = state => {
     return {

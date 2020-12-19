@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from "react";
-import {Route, Redirect, Switch} from "react-router-dom"
+import React, {Component} from "react";
+import {Route, Link, Redirect, Switch} from "react-router-dom"
 import css from './style.module.css';
 import Toolbar from "../../components/Toolbar";
 import BurgerPage from "../BurgerPage";
@@ -11,11 +11,17 @@ import SignUpPage from "../SignUpPage"
 import Logout from "../../components/Logout";
 import { connect } from "react-redux";
 import * as actions from "../../redux/action/loginAction"
-
-const App = (props) => {
-  const [showSideBar, setShowSideBar] = useState(false);
-
-  useEffect(() => {
+class App extends Component {
+  
+  state = {
+    showSideBar : false,
+  }
+  toggleSideBar = () => {
+    this.setState(prevState => {
+      return {showSideBar: !prevState.showSideBar}
+    })
+  }
+  componentDidMount = () => {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
     const refreshToken = localStorage.getItem("refreshToken");
@@ -23,27 +29,25 @@ const App = (props) => {
     // const expireDate = new Date(expireDateMilliSec);
     if(token){
       if(new Date().getTime() < expireDateMilliSec){
-        props.autoLogin(token, userId, refreshToken);
+        this.props.autoLogin(token, userId, refreshToken);
 
-        props.autoLogoutAfterMillisec(
+        this.props.autoLogoutAfterMillisec(
           expireDateMilliSec - new Date().getTime()
         );
       }
       else {
-        props.logout();
+        this.props.logout();
       }
     } 
-  }, [])
-
-  const toggleSideBar = () => {
-    setShowSideBar(prevShowSideBar => !prevShowSideBar)
+    // setInterval(() => console.log(new Date().getTime() < expireDateMilliSec), 1000) ;
   }
+  render(){
     return (
           <div>
-            <SideBar isShow={showSideBar} hideSideBar={toggleSideBar}/>
-            <Toolbar showSideBar={toggleSideBar}/>
+            <SideBar isShow={this.state.showSideBar} hideSideBar={this.toggleSideBar}/>
+            <Toolbar showSideBar={this.toggleSideBar}/>
             <main className={css.Content}>
-              {props.userId ? 
+              {this.props.userId ? 
                 <Switch>
                   <Route path="/ship" component={ShippingPage} />
                   <Route path="/orders" component={OrdersPage} />
@@ -60,6 +64,7 @@ const App = (props) => {
             </main>
         </div>
     );
+  }
 }
 const mapStateToProps = state => {
   return {

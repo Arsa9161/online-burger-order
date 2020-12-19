@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import css from "./style.module.css";
 import Burger from "../../components/Burger"
 import BuildControls from "../../components/BuildControls"
@@ -7,45 +7,33 @@ import OrderSummary from "../../components/OrderSummary";
 import axios from "../../axios-orders";
 import Loader from "../../components/Loader"
 
-class BurgerBuilder extends Component{
+const BurgerBuilder = props => {
+    const [confirmOrder, setConfirmOrder] = useState(false);
+    const [loading, setLoading] = useState(false)
 
-    state = {
-        confirmOrder: false,
-        loading: false
+    const showConfirmOrder = () => {
+        setConfirmOrder(true)
     }
-    showConfirmOrder = () => {
-        this.setState({confirmOrder : true})
+    const hideConfirmOrder = () => {
+        setConfirmOrder(false)
     }
-    hideConfirmOrder = () => {
-        this.setState({confirmOrder : false})
-    }
-    continueOrder = () => {
+    const continueOrder = () => {
 
-        // let arr = [];
-        // for(let property in this.state.ingredients){
-        //     arr.push(property + "=" + this.state.ingredients[property]);
-        // }
-        // arr.push("dun=" + this.state.totalPrice)
-
-        this.props.history.push({
+        props.history.push({
             pathname : "/ship",
-            // search : arr.join("&")
         });
-        this.hideConfirmOrder();
+        hideConfirmOrder();
     }
-    render(){
-
         return (
             <div>
-                <Modal isShow={this.state.confirmOrder} hide={this.hideConfirmOrder}>
-                    {this.state.loading ? <Loader /> :
-                    <OrderSummary onCancelOrder={this.hideConfirmOrder} onContinueOrder={this.continueOrder}/>}
+                <Modal isShow={confirmOrder} hide={hideConfirmOrder}>
+                    {loading ? <Loader /> :
+                    <OrderSummary onCancelOrder={hideConfirmOrder} onContinueOrder={continueOrder}/>}
                 </Modal>
                 <Burger/>
-                <BuildControls show={this.showConfirmOrder}/>
+                <BuildControls show={showConfirmOrder}/>
             </div>
         );
-    }
 } 
 
 export default BurgerBuilder;
