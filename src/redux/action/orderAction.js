@@ -59,3 +59,8 @@ export const saveOrderError = (error) => {
         error
     }
 }
+export const cancelOrder = () => {
+    return {
+        type : "CANCEL_ORDER",
+    }
+}

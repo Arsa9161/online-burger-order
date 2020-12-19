@@ -16,6 +16,7 @@ class ContactData extends React.Component {
     }
     componentDidUpdate = () => {
         if(this.props.finished && !this.props.error) {
+            this.props.cancelOrder();
             this.props.history.replace("/orders")
         }
     }
@@ -70,7 +71,8 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        saveOrder : (obj) => dispatch(actions.saveOrder(obj))
+        saveOrder : (obj) => dispatch(actions.saveOrder(obj)),
+        cancelOrder : () => dispatch(actions.cancelOrder())
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ContactData)); 

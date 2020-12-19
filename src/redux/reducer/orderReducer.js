@@ -58,9 +58,15 @@ const orderReducer = (state = initState, action) => {
                         error : action.error
                     }
                 };
-            case "LOGOUT" : 
+            case "CANCEL_ORDER" : 
                 return {
-                    ...initState
+                    ...state,
+                    newOrder : {
+                        ...state.newOrder,
+                        loading : false,
+                        finished : false,
+                        error : null
+                    }
                 }
         default : return state;
     }
