@@ -41,7 +41,7 @@ const LoginPage = props => {
 
 }
 const mapStateToProps = state => {
-
+    console.log( "=============="  + state.loginSignUpReducer.userId);
     return {
         loginIn : state.loginSignUpReducer.loginIn,
         error : state.loginSignUpReducer.error,

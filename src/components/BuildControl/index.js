@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import css from "./style.module.css";
 
 const BuildControl = props => {

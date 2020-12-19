@@ -1,16 +1,21 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, Suspense} from "react";
 import {Route, Redirect, Switch} from "react-router-dom"
 import css from './style.module.css';
 import Toolbar from "../../components/Toolbar";
-import BurgerPage from "../BurgerPage";
 import SideBar from '../../components/SideBar';
-import OrdersPage from "../OrdersPage";
-import ShippingPage from "../ShippingPage";
 import LoginPage from "../LoginPage"
-import SignUpPage from "../SignUpPage"
 import Logout from "../../components/Logout";
 import { connect } from "react-redux";
 import * as actions from "../../redux/action/loginAction"
+import {BurgerStore} from "../../context/burgerContext"
+
+const BurgerPage = React.lazy(() => import("../BurgerPage"))
+
+const OrdersPage = React.lazy(() => import("../OrdersPage"))
+
+const ShippingPage = React.lazy(() => import("../ShippingPage"))
+
+const SignUpPage = React.lazy(() => import("../SignUpPage"))
 
 const App = (props) => {
   const [showSideBar, setShowSideBar] = useState(false);
@@ -38,25 +43,30 @@ const App = (props) => {
   const toggleSideBar = () => {
     setShowSideBar(prevShowSideBar => !prevShowSideBar)
   }
+  // Suspense  - ene dotor bga componentuudad lazy g ashiglasan shuu gedgiig helne
+  // fallback - js tataj bh hoorond spinner zergiig haruulah component oo damjuulj ugdug
     return (
           <div>
             <SideBar isShow={showSideBar} hideSideBar={toggleSideBar}/>
             <Toolbar showSideBar={toggleSideBar}/>
             <main className={css.Content}>
-              {props.userId ? 
-                <Switch>
-                  <Route path="/ship" component={ShippingPage} />
-                  <Route path="/orders" component={OrdersPage} />
-                  <Route path="/logout" component={Logout} />
-                  <Route path="/" exact component={BurgerPage} />
-                  <Redirect to="/orders"/>
-                </Switch> : 
-                <Switch>
-                  <Route path="/login" component={LoginPage} />
-                  <Route path="/signup" component={SignUpPage} />
-                  <Redirect to="/login"/>
-                </Switch>
-              }
+              <Suspense fallback={<div>Түр хүлээнэ үү...</div>}> 
+                {props.userId ? 
+                  <Switch>
+                    <Route path="/orders" component={OrdersPage} />
+                    <Route path="/logout" component={Logout} />
+                    <BurgerStore>
+                      <Route path="/ship" component={ShippingPage} />
+                      <Route path="/" component={BurgerPage} />
+                    </BurgerStore>
+                  </Switch> : 
+                  <Switch>
+                    <Route path="/login" component={LoginPage} />
+                    <Route path="/signup" component={SignUpPage} />
+                    <Redirect to="/login"/>
+                  </Switch>
+                }
+              </Suspense>
             </main>
         </div>
     );
