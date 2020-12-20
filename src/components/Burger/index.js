@@ -2,7 +2,7 @@ import React, {useContext} from "react";
 import css from "./style.module.css";
 import BurgerIngredients from "../BurgerIngredients";
 import { connect } from "react-redux";
-import BurgerContext from "../../context/burgerContext"
+import BurgerContext from "../../context/BurgerContext"
 
 const Burger  = (props) => {
     const burgerContext = useContext(BurgerContext)

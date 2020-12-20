@@ -1,13 +1,13 @@
-import React, {useState, useEffect, Suspense} from "react";
+import React, {useState, useEffect, Suspense, useContext} from "react";
 import {Route, Redirect, Switch} from "react-router-dom"
 import css from './style.module.css';
 import Toolbar from "../../components/Toolbar";
 import SideBar from '../../components/SideBar';
 import LoginPage from "../LoginPage"
 import Logout from "../../components/Logout";
-import { connect } from "react-redux";
-import * as actions from "../../redux/action/loginAction"
-import {BurgerStore} from "../../context/burgerContext"
+import {BurgerStore} from "../../context/BurgerContext"
+import UserContext from "../../context/UserContext"
+import {OrderStore} from "../../context/OrderContext"
 
 const BurgerPage = React.lazy(() => import("../BurgerPage"))
 
@@ -19,23 +19,25 @@ const SignUpPage = React.lazy(() => import("../SignUpPage"))
 
 const App = (props) => {
   const [showSideBar, setShowSideBar] = useState(false);
+  const userCtx = useContext(UserContext);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
     const refreshToken = localStorage.getItem("refreshToken");
+    const expireDate = localStorage.getItem("expireIn");
     const expireDateMilliSec = new Date(localStorage.getItem("expireIn")).getTime();
     // const expireDate = new Date(expireDateMilliSec);
     if(token){
       if(new Date().getTime() < expireDateMilliSec){
-        props.autoLogin(token, userId, refreshToken);
+        userCtx.autoLogin(token, userId, refreshToken, expireDate);
 
-        props.autoLogoutAfterMillisec(
+        userCtx.autoLogoutAfterMillisec(
           expireDateMilliSec - new Date().getTime()
         );
       }
       else {
-        props.logout();
+        userCtx.logout();
       }
     } 
   }, [])
@@ -51,36 +53,29 @@ const App = (props) => {
             <Toolbar showSideBar={toggleSideBar}/>
             <main className={css.Content}>
               <Suspense fallback={<div>Түр хүлээнэ үү...</div>}> 
-                {props.userId ? 
-                  <Switch>
-                    <Route path="/orders" component={OrdersPage} />
-                    <Route path="/logout" component={Logout} />
-                    <BurgerStore>
+                <BurgerStore>
+                  {userCtx.state.userId ? 
+                    <Switch>
+                      <Route path="/orders">
+                        <OrderStore>
+                          <OrdersPage />
+                        </OrderStore>
+                      </Route>
+                      <Route path="/logout" component={Logout} />
                       <Route path="/ship" component={ShippingPage} />
                       <Route path="/" component={BurgerPage} />
-                    </BurgerStore>
-                  </Switch> : 
-                  <Switch>
-                    <Route path="/login" component={LoginPage} />
-                    <Route path="/signup" component={SignUpPage} />
-                    <Redirect to="/login"/>
-                  </Switch>
-                }
+                    </Switch> : 
+                    <Switch>
+                      <Route path="/login" component={LoginPage} />
+                      <Route path="/signup" component={SignUpPage} />
+                      <Redirect to="/login"/>
+                    </Switch>
+                  }
+                </BurgerStore>
               </Suspense>
             </main>
         </div>
     );
 }
-const mapStateToProps = state => {
-  return {
-    userId : state.loginSignUpReducer.userId
-  }
-}
-const mapDispatchToProps = dispatch => {
-  return {
-    autoLogin : (token, userId, refreshToken) => dispatch(actions.loginSuccess(token, userId, refreshToken)),
-    logout : () => dispatch(actions.logout()),
-    autoLogoutAfterMillisec : (msec) => dispatch(actions.logoutAfterMilliSec(msec))
-  }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+
+export default App;

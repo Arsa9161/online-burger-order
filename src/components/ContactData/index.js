@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from "react";
-import {withRouter} from "react-router-dom";
-import { connect } from "react-redux";
+import React, {useState, useEffect, useContext} from "react";
+import {useHistory} from "react-router-dom";
 
 import css from "./style.module.css"
 import Button from "../General/Button";
 import Loader from "../Loader";
-import * as actions from "../../redux/action/orderAction";
+import BurgerContext from "../../context/BurgerContext";
+import UserContext from "../../context/UserContext";
 
 const initState = {
     dugaar : null,
@@ -15,22 +15,25 @@ const initState = {
 
 const ContactData = props => {
     const [user, setUser] = useState(initState)
+    const burgerCtx = useContext(BurgerContext)
+    const userCtx = useContext(UserContext)
+    const history = useHistory();
 
     useEffect(() =>{
-        if(props.finished && !props.error) {
-            props.cancelOrder();
-            props.history.replace("/orders")
+        if(burgerCtx.burger.finished && !burgerCtx.burger.error) {
+            burgerCtx.cancelOrder();
+            history.replace("/orders")
         }
     })
 
     const confirmOrder = () => {
         let obj = {
-            orts: props.ingredients,
-            une: props.totalPrice,
+            orts: burgerCtx.burger.ingredients,
+            une: burgerCtx.burger.totalPrice,
             tuhai: user,
-            userId : props.userId
+            userId : userCtx.state.userId
         }
-        props.saveOrder(obj);
+        burgerCtx.saveOrder(obj);
     }
     const changeName = (e) => {
         setUser({ner : e.target.value,hayg : user.hayg, dugaar : user.dugaar})
@@ -44,7 +47,7 @@ const ContactData = props => {
 
         return (
         <div>
-            {props.loading ? <Loader /> : 
+            {burgerCtx.burger.saving ? <Loader /> : 
             <div className={css.ContactData}>
                 <input onChange={changeName} type="text" name="name" placeholder="neree oruulna uu"/>
                 <input onChange={changeHayag} type="text" name="location" placeholder="hayagaa oruulna uu"/>
@@ -54,20 +57,5 @@ const ContactData = props => {
         </div>)
 
 }
-const mapStateToProps = state => {
-    return {
-        ingredients : state.burgerReducer.ingredients,
-        totalPrice : state.burgerReducer.totalPrice,
-        loading : state.orderReducer.newOrder.loading,
-        error : state.orderReducer.newOrder.error,
-        finished : state.orderReducer.newOrder.finished,
-        userId : state.loginSignUpReducer.userId
-    }
-}
-const mapDispatchToProps = dispatch => {
-    return {
-        saveOrder : (obj) => dispatch(actions.saveOrder(obj)),
-        cancelOrder : () => dispatch(actions.cancelOrder())
-    }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ContactData)); 
+
+export default ContactData; 

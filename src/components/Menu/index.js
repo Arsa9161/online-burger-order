@@ -1,12 +1,14 @@
-import React from "react";
+import React, {useContext} from "react";
 import css from "./style.module.css";
 import MenuItem from "../MenuItem";
-import {connect} from "react-redux";
+import UserContext from "../../context/UserContext"
 
 const Menu = (props) => {
+    const userCtx = useContext(UserContext)
+
     return (
         <nav className={css.Menu}>
-            {props.userId ? 
+            {userCtx.state.userId ? 
                 <React.Fragment>
                     <MenuItem exact link="/">ШИНЭ ЗАХИАЛГА</MenuItem>
                     <MenuItem link="/orders">ЗАХИАЛГУУД</MenuItem>
@@ -26,4 +28,4 @@ const mapStateToProps = state => {
       userId : state.loginSignUpReducer.userId
     }
   }
- export default connect(mapStateToProps)(Menu);
+ export default Menu;

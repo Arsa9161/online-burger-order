@@ -1,32 +1,21 @@
-import React, {useEffect} from "react";
-import { connect } from "react-redux";
-
+import React, {useEffect, useContext} from "react";
 import Loader from "../../components/Loader";
 import Order from "../../components/Order";
-import * as actions from "../../redux/action/orderAction"
-const OrdersPage = props => {
+import OrderContext from "../../context/OrderContext"
 
+const OrdersPage = props => {
+    const orderCtx = useContext(OrderContext);
+ 
     useEffect(() => {
-        props.servereesUnshih();
+        orderCtx.loadOrders();
     }, [])
 
         return (
             <div>
-                {props.loading ? <Loader /> : props.orders.map(el => <Order key={el[0]} order={el[1]} />)}
+                {orderCtx.state.loading ? <Loader /> : orderCtx.state.orders.map(el => <Order key={el[0]} order={el[1]} />)}
             </div>
         )
 
 }
-const mapStateToProps = state => {
-    return {
-        loading : state.orderReducer.loading,
-        orders : state.orderReducer.orders,
-        error : state.orderReducer.error
-    }
-}
-const mapDispatchToProps = dispatch => {
-    return {
-        servereesUnshih : () => dispatch(actions.loadOrders())
-    }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(OrdersPage);
+
+export default OrdersPage;
